@@ -32,7 +32,7 @@ class NewOutflow extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        if (typeof this.props.submitHandler == 'function') {
+        if (typeof this.props.submitHandler === 'function') {
             this.props.submitHandler(this.state.amount,this.state.date,this.state.type);
         }
         this.setState({
@@ -94,6 +94,7 @@ export default class Dashboard extends React.Component {
     render() {
         let outflowItems = this.state.outflows.map((item,i) => <SingleOutflow date={item.date} type={item.type} amount={item.amount} key={i}/>);
         return(<div>
+            <div id={"pieChart"}/>
             <NewOutflow submitHandler={this.submitHandler}/>
             <ul>
                 {outflowItems}
