@@ -10,7 +10,7 @@ module.exports = {
   watch: true,
   mode: 'development',
   entry: {
-    main: path.join(__dirname, 'src', 'app.js')
+    main: path.join(__dirname, 'components', 'main.jsx')
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -25,7 +25,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',

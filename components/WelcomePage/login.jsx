@@ -42,7 +42,7 @@ export default class LoginForm extends React.Component {
 
     render(){
 
-        // let style = {textAlign: "center", color:"grey"};
+        // let style = {fontFamily: 'Unlock'};
         let sectionStyle = {
             width: "100%",
             height: "671px",
