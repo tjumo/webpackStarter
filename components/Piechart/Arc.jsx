@@ -6,6 +6,7 @@ export class Arc extends React.Component {
         super(props);
 
         this.arc = d3.arc();
+        this.f = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('font-size'));
     }
     componentWillMount() {
         this.updateD3(this.props);
@@ -24,7 +25,9 @@ export class Arc extends React.Component {
 
 export default class LabeledArc extends Arc {
     render() {
-        let [labelX, labelY] = this.arc.centroid(this.props.data);
+        let [x, y] = this.arc.centroid(this.props.data);
+        let h = Math.sqrt(x*x+y*y);
+        let labelX = x/h*(this.props.outerRadius+2*this.f), labelY = y/h*(this.props.outerRadius+2*this.f);
 
         return (<g>
             {super.render()}

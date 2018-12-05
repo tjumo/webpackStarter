@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import LoginForm from './WelcomePage/login.jsx';
+import LoginForm from './WelcomePage/Login.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx'
 
 class App extends React.Component {
