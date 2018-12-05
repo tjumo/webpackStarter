@@ -4,7 +4,9 @@ import OutflowManagement from './ManagementView.jsx';
 
 export default class Dashboard extends React.Component {
     render(){
-        return <OutflowManagement/>
+        return <div>
+            <OutflowManagement/>
+        </div>
     }
 }
 

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React from 'react';
+import Piechart from '../Piechart/Piechart.jsx';
 
 
 const colorGenerator = () => {
@@ -10,11 +11,7 @@ const colorGenerator = () => {
 };
 
 const colorSimilarity = (red,green,blue,red2,green2,blue2) => {
-    if (Math.abs(red-red2) * Math.abs(green-green2) * Math.abs(blue-blue2) < 1000 ) {
-        return true
-    } else {
-        return false
-    }
+    return (Math.abs(red-red2) * Math.abs(green-green2) * Math.abs(blue-blue2) < 1000 );
 };
 
 const colorHashToNum = (hash) => {
@@ -22,11 +19,11 @@ const colorHashToNum = (hash) => {
     let green = parseInt(hash.substr(3,5),16);
     let blue = parseInt(hash.substr(5,7),16);
     return [red,green,blue];
-}
+};
 
 const colorNumToHash = (red,green,blue) => {
     return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`
-}
+};
 
 class NewOutflow extends React.Component {
     constructor(props) {
@@ -156,28 +153,46 @@ export default class OutflowManagement extends React.Component {
 
         this.state = {
             outflows: [],
-            total: 0
+            total: 0,
+            minDate: moment().subtract(3,'days'),
+            maxDate: moment('2018-12-24','YYYY-MM-DD')
         }
     }
 
+    dataPrep() {
+        let labels = new Set(this.state.outflows.map(outflow => outflow.label));
+        console.log(labels);
+        let data = [];
+        for (let label of labels) {
+            let filtered = this.state.outflows.filter(outflow => outflow.label === label);
+            let sum = filtered.reduce((prev,curr) => prev+curr.amount,0);
+            console.log(`processed ${label}, extracted ${filtered.length} items which add up to ${sum}`);
+            data.push({value: sum, label: label});
+        }
+        console.log(data);
+        return data;
+    }
+
     submitHandler = (amount,date,name,label,color) => {
-        let outflow = {amount: amount,
+        let outflow = {amount: parseInt(amount,10),
             date: date,
             name: name,
             label: label,
             color: color};
         this.setState({
             outflows: [...this.state.outflows,outflow],
-            total: this.state.total + amount     // zrobic  z tego jsona i axios
+            total: this.state.total + parseInt(amount,10)     //TODO: zrobic  z tego jsona i axios
         });
     };
 
     render() {
-        let filteredOutflows = this.state.outflows.filter(elem => elem.date > moment().subtract(3,'days'));
+        let filteredOutflows = this.state.outflows.filter(elem => (moment(elem.date,"YYYY-MM-DD") > this.state.minDate && moment(elem.date,"YYYY-MM-DD") < this.state.maxDate));
+        // console.log(filteredOutflows);
         let outflowItems = filteredOutflows.map((item,i) => <SingleOutflow date={item.date} name={item.name} amount={item.amount} label={item.label} key={i} color={item.color}/>);
         return(<div>
-            <div id={"pieChart"}/>
+
             <NewOutflow submitHandler={this.submitHandler}/>
+            {/*<Piechart x={100} y={100} outerRadius={100} innerRadius={1} data={this.dataPrep()} />*/}
             <ul>
                 {outflowItems}
             </ul>
