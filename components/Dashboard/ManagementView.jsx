@@ -28,19 +28,20 @@ const colorNumToHash = (red,green,blue) => {
 class NewOutflow extends React.Component {
     constructor(props) {
         super(props);
-        this. state = {
+
+        this.state = {
             amount: 0,
             date: moment().format('YYYY-MM-DD'),
             name: '',
-            label:'Choose label',
+            label:'Choose a label',
             labels: {Food: "#FF320F",
-                Bills: "#00833D",
-                Restaurants: "#004CCA",
-                Transportation: "#52528C",
-                Tickets: "#fff85b",
-                Clothing: "#e55120",
-                Toys: "#a9347e",
-                Gifts: "#bada55"}
+                     Bills: "#00833D",
+                     Restaurants: "#004CCA",
+                     Transportation: "#52528C",
+                     Tickets: "#fff85b",
+                     Clothing: "#e55120",
+                     Toys: "#a9347e",
+                     Gifts: "#bada55"}
         }
 
     }
@@ -105,7 +106,7 @@ class NewOutflow extends React.Component {
             amount: 0,
             name: '',
             date: moment().format('YYYY-MM-DD'),
-            label: 'Choose label'
+            label: 'Choose a label'
         })
     };
 
@@ -121,7 +122,7 @@ class NewOutflow extends React.Component {
                 <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
                 <input type="date" value={this.state.date} onChange={this.handleDateChange} />
                 <select onChange={this.handleSelected} value={this.state.label}>
-                    <option disabled={true} defaultValue={true}>Choose label</option>
+                    <option disabled={true} defaultValue={true}>Choose a label</option>
                     {Labels}
                     <option>Add new label</option>
                 </select>
@@ -155,19 +156,21 @@ export default class OutflowManagement extends React.Component {
             outflows: [],
             total: 0,
             minDate: moment().subtract(3,'days'),
-            maxDate: moment('2018-12-24','YYYY-MM-DD')
+            maxDate: moment('2018-12-24','YYYY-MM-DD'),
+            colors: {}
         }
     }
 
     dataPrep() {
-        let labels = new Set(this.state.outflows.map(outflow => outflow.label));
-        console.log(labels);
+        let labels = Object.keys(this.state.colors);
+        // console.log(labels);
         let data = [];
-        for (let label of labels) {
+        for (let i=0;i<labels.length;i++) {
+            let label = labels[i];
             let filtered = this.state.outflows.filter(outflow => outflow.label === label);
             let sum = filtered.reduce((prev,curr) => prev+curr.amount,0);
-            console.log(`processed ${label}, extracted ${filtered.length} items which add up to ${sum}`);
-            data.push({value: sum, label: label});
+            // console.log(`processed ${label}, extracted ${filtered.length} items which add up to ${sum}`);
+            data.push({value: sum, label: label, color: this.state.colors[label]});
         }
         console.log(data);
         return data;
@@ -179,8 +182,11 @@ export default class OutflowManagement extends React.Component {
             name: name,
             label: label,
             color: color};
+        let colors = this.state.colors;
+        colors[label] = color;
         this.setState({
             outflows: [...this.state.outflows,outflow],
+            colors: colors,
             total: this.state.total + parseInt(amount,10)     //TODO: zrobic  z tego jsona i axios
         });
     };
@@ -192,7 +198,7 @@ export default class OutflowManagement extends React.Component {
         return(<div>
 
             <NewOutflow submitHandler={this.submitHandler}/>
-            {/*<Piechart x={100} y={100} outerRadius={100} innerRadius={1} data={this.dataPrep()} />*/}
+            <Piechart x={100} y={100} outerRadius={100} innerRadius={1} data={this.dataPrep()}/>
             <ul>
                 {outflowItems}
             </ul>

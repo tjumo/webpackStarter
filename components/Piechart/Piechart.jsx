@@ -15,11 +15,11 @@ export default class Piechart extends React.Component {
                                          outerRadius={this.props.outerRadius}
                                          color={this.colors(i)}/>;
     render() {
-        console.log(this.props.data);
         let pie = this.pie(this.props.data);
-        // console.log(pie);
         let translate = `translate(${this.props.x}, ${this.props.y})`;
 
-        return (<svg><g transform={translate}>{pie.map((d,i) => this.arcGenerator(d,i))}</g></svg>)
+        return (<svg width={250} height={250}>
+                    <g transform={translate}>{pie.map((d,i) => this.arcGenerator(d,i))}</g>
+                </svg>)
     }
 }

@@ -5,7 +5,7 @@ export class Arc extends React.Component {
     constructor(props) {
         super(props);
 
-        this.arc = d3.svg.arc();
+        this.arc = d3.arc();
     }
     componentWillMount() {
         this.updateD3(this.props);
@@ -25,11 +25,10 @@ export class Arc extends React.Component {
 export default class LabeledArc extends Arc {
     render() {
         let [labelX, labelY] = this.arc.centroid(this.props.data);
-        let labelTranslate = `translate(${labelX}, ${labelY}`;
 
         return (<g>
             {super.render()}
-            <text transform={labelTranslate} textAnchor="middle">{this.props.data.data.label}</text>
+            <text x={labelX} y={labelY} textAnchor="middle">{this.props.data.data.label}</text>
             </g>)
     }
 }
