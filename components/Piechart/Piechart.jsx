@@ -6,7 +6,7 @@ export default class Piechart extends React.Component {
     constructor(props) {
         super(props);
 
-        this.pie = d3.pie().value((d) => d.value);
+        this.pie = d3.pie().value((d) => d.value).sort(null);
         let colorScale = d3.scaleOrdinal().domain(Object.keys(this.props.colors))
                                            .range(Object.values(this.props.colors));
         this.colors = label => colorScale(label);

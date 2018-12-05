@@ -24,7 +24,7 @@ export default class OutflowManagement extends React.Component {
         this.state = {
             outflows: [],
             minDate: moment().subtract(3,'days').format('YYYY-MM-DD'),
-            maxDate: '2018-12-24',
+            maxDate: '2018-12-31',
             colors: {}
         }
     }
@@ -38,8 +38,16 @@ export default class OutflowManagement extends React.Component {
             // console.log(`processed ${label}, extracted ${filtered.length} items which add up to ${sum}`);
             data.push({value: sum, label: label});
         }
-        // console.log(data);
-        return data;
+        data.sort((a,b) => a.value - b.value);
+        let ans = new Set();
+        for (let i=0;i<=data.length;i++) {
+            let item = i%2? data[(i-1)/2] : data[data.length-i/2-1];
+            // console.log(`step ${i}, current item: `);
+            // console.log(item);
+            ans.add(item);
+        }
+        console.log(Array.from(ans));
+        return arr.length>0 ? Array.from(ans) : [];
     }
 
     handleDate = e => {
