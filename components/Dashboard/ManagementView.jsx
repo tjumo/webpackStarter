@@ -23,7 +23,6 @@ export default class OutflowManagement extends React.Component {
 
         this.state = {
             outflows: [],
-            total: 0,
             minDate: moment().subtract(3,'days').format('YYYY-MM-DD'),
             maxDate: '2018-12-24',
             colors: {}
@@ -32,10 +31,8 @@ export default class OutflowManagement extends React.Component {
 
     dataPrep(arr) {
         let labels = new Set(arr.map(elem => elem.label));
-        // console.log(labels);
         let data = [];
-        for (let i=0;i<labels.length;i++) {
-            let label = labels[i];
+        for (let label of labels) {
             let filtered = arr.filter(outflow => outflow.label === label);
             let sum = filtered.reduce((prev,curr) => prev+curr.amount,0);
             // console.log(`processed ${label}, extracted ${filtered.length} items which add up to ${sum}`);
@@ -61,15 +58,15 @@ export default class OutflowManagement extends React.Component {
         colors[label] = color;
         this.setState({
             outflows: [...this.state.outflows,outflow],
-            colors: colors,
-            total: this.state.total + parseInt(amount,10)     //TODO: zrobic  z tego jsona i axios
+            colors: colors
         });
+        //TODO: postowanie do JSON-servera przez axios
     };
 
 
     belongsToPeriodInQuestion(elem) {
-        let outflowAfterMinDate = moment(elem.date,"YYYY-MM-DD") > moment(this.state.minDate,'YYYY-MM-DD');
-        let outflowBeforeMaxDate = moment(elem.date,"YYYY-MM-DD") < moment(this.state.maxDate,'YYYY-MM-DD');
+        let outflowAfterMinDate = moment(elem.date,"YYYY-MM-DD") >= moment(this.state.minDate,'YYYY-MM-DD');
+        let outflowBeforeMaxDate = moment(elem.date,"YYYY-MM-DD") <= moment(this.state.maxDate,'YYYY-MM-DD');
         return ( outflowAfterMinDate && outflowBeforeMaxDate);
     }
 
