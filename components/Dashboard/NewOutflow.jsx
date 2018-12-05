@@ -93,10 +93,12 @@ export default class NewOutflow extends React.Component {
         }
 
     };
-
+    validation() {
+        return Number(this.state.amount) && this.state.name.length && (this.state.label !== 'Choose a label')
+    }
     handleSubmit = (e) => {
         e.preventDefault();
-        if (typeof this.props.submitHandler === 'function') {
+        if ((typeof this.props.submitHandler === 'function')  && this.validation()) {
             this.props.submitHandler(this.state.amount,this.state.date,this.state.name,this.state.label,
                 this.state.labels[this.state.label]);
         }
