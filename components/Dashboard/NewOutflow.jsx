@@ -79,15 +79,8 @@ export default class NewOutflow extends React.Component {
                 <MenuItem eventKey={i+1} key={`option-${i+1}`} active onSelect={this.handleSelected}>{e} </MenuItem>
                 :
                 <MenuItem eventKey={i+1} key={`option-${i+1}`} onSelect={this.handleSelected}>{e}</MenuItem>);
+
         let width = 10 * Math.max('Choose a label'.length,...Object.keys(this.props.labels).map(elem=> elem.length));
-        return (<SplitButton bsStyle={'default'} title={this.state.label} id={`dropdown-label`}
-                                style={{width: `${width}px`}}>
-                    <MenuItem disabled={true} defaultValue={true} key={`option-default`} onSelect={this.handleSelected}>
-                        Choose a label</MenuItem>
-                    {options}
-                    <MenuItem divider />
-                    <MenuItem eventKey={"0"} key={`option-0`} onSelect={this.handleSelected}>Add new label</MenuItem>
-            </SplitButton>);
 
         {/*// return (<div>{this.props.wrong? <span style={{color: "red"}}>Fields are not filled properly!</span> : <br />}*/}
         {/*//     <form action="" onSubmit={this.handleSubmit} className={"form-horizontal"}>*/}
@@ -126,5 +119,16 @@ export default class NewOutflow extends React.Component {
         {/*//         </div>*/}
         {/*//     </form>*/}
         {/*//     </div>);*/}
+
+        return (<SplitButton bsStyle={'default'} title={this.state.label} id={`dropdown-label`}
+                                style={{width: `${width}px`}}>
+                    <MenuItem disabled={true} defaultValue={true} key={`option-default`} onSelect={this.handleSelected}>
+                        Choose a label</MenuItem>
+                    {options}
+                    <MenuItem divider />
+                    <MenuItem eventKey={"0"} key={`option-0`} onSelect={this.handleSelected}>Add new label</MenuItem>
+            </SplitButton>);
+
+
     }
 }
