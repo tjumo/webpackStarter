@@ -5,6 +5,6 @@ export default class NotYetImplemented extends React.Component {
         super(props);
     }
     render() {
-        return (<div className={'text-center jumbotron'}>Prace w toku</div>);
+        return (<h1 className={'text-center'}>Prace w toku</h1>);
     }
 }

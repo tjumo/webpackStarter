@@ -3,5 +3,16 @@ section {
   display: grid; }
 
 h1 {
-  font-family: 'Unlock', cursive; }
+  font-family: 'Unlock', cursive;
+  font-size: 41px;
+}
+
+body {
+  background: url('images/astronomy.jpg') no-repeat center;
+  background-size: cover;
+  color: aliceblue;
+}
+input {
+  background-color: darkslategray;
+}
 

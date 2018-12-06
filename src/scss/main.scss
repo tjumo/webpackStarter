@@ -10,8 +10,16 @@
 //}
 h1 {
   font-family: 'Unlock', cursive;
+  font-size: 41px;
 }
-//
-//.myClass {
-//  height: 100%
-//}
+
+body {
+  background: url('images/astronomy.jpg') no-repeat center;
+  background-size: cover;
+  color: aliceblue;
+}
+input {
+  background-color: darkslategray;
+}
+
+

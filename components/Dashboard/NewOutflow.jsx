@@ -1,47 +1,22 @@
 import React from "react";
 import moment from "moment";
-
-const colorGenerator = () => {
-    let red = Math.floor(Math.random()*256);
-    let green = Math.floor(Math.random()*256);
-    let blue = Math.floor(Math.random()*256);
-    return [red,green,blue];
-};
-
-const colorSimilarity = (red,green,blue,red2,green2,blue2) => {
-    return (Math.abs(red-red2) * Math.abs(green-green2) * Math.abs(blue-blue2) < 1000 );
-};
-
-const colorHashToNum = (hash) => {
-    let red = parseInt(hash.substr(1,3),16);
-    let green = parseInt(hash.substr(3,5),16);
-    let blue = parseInt(hash.substr(5,7),16);
-    return [red,green,blue];
-};
-
-const colorNumToHash = (red,green,blue) => {
-    return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`
-};
+import {SplitButton,MenuItem} from 'react-bootstrap';
 
 export default class NewOutflow extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            wrong: false,
             amount: 0,
             date: moment().format('YYYY-MM-DD'),
             name: '',
-            label:'Choose a label',
-            labels: {Food: "#FF320F",
-                Bills: "#00833D",
-                Restaurants: "#004CCA",
-                Transportation: "#52528C",
-                Tickets: "#fff85b",
-                Clothing: "#e55120",
-                Toys: "#a9347e",
-                Gifts: "#bada55"}
+            label: this.props.selected
         }
+    }
 
+    componentWillReceiveProps(newProps) {
+        this.setState({label: newProps.selected});
     }
     handleNameChange = (e) => {
         this.setState({
@@ -61,74 +36,95 @@ export default class NewOutflow extends React.Component {
         });
     };
 
-    handleSelected = (e) => {
-        let label = e.currentTarget.value;
+    handleSelected = (eventKey,event) => {
+        // console.log(event.currentTarget.text);
+        let label = event.currentTarget.text;
         if (label === "Add new label") {
             let newLabel = prompt('Name it');
-            if (Object.keys(this.state.labels).includes(newLabel)) {
-                alert(`The label ${newLabel} already exists`);
-                //TODO: przerobić sprawdzenie na case-insensitive.
-            } else {
-                let distinct = false;
-                while (!distinct) {
-                    var [newRed,newGreen,newBlue] = colorGenerator();
-                    let oldColorsSimilarity = Object.values(this.state.labels).map(elem => {
-                        let [red,green,blue] = colorHashToNum(elem);
-                        return colorSimilarity(red,green,blue,newRed,newGreen,newBlue)
-                    });
-                    distinct = oldColorsSimilarity.every(elem => !elem);
-                }
-
-                let labels = this.state.labels;
-                labels[newLabel] = colorNumToHash(newRed,newGreen,newBlue);
-                this.setState({
-                    labels: labels,
-                    label: newLabel
-                });
+            if (typeof this.props.addLabel === 'function') {
+                this.props.addLabel(newLabel);
             }
         } else {
-            this.setState({
-                label: label
-            });
-        }
+                this.setState({
+                    label: label
+                });
+            }
+    }
 
-    };
     validation() {
         return Number(this.state.amount) && this.state.name.length && (this.state.label !== 'Choose a label')
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        if ((typeof this.props.submitHandler === 'function')  && this.validation()) {
-            this.props.submitHandler(this.state.amount,this.state.date,this.state.name,this.state.label,
-                this.state.labels[this.state.label]);
+        if (this.validation()) {
+            if (typeof this.props.submitHandler === 'function') {
+                this.props.submitHandler(this.state.amount,this.state.date,this.state.name,this.state.label);
+            }
+            this.setState({
+                amount: 0,
+                name: '',
+                date: moment().format('YYYY-MM-DD'),
+                label: 'Choose a label'
+            });
+        } else {
+            this.setState({
+                wrong: true
+            });
         }
-        this.setState({
-            amount: 0,
-            name: '',
-            date: moment().format('YYYY-MM-DD'),
-            label: 'Choose a label'
-        })
     };
 
-
     render() {
-        let Labels = Object.keys(this.state.labels).map((e,i) => {
-            return <option key={i}>{e}</option>
-        });
+        let options = Object.keys(this.props.labels).map((e,i) =>
+            e===this.state.label?
+                <MenuItem eventKey={i+1} key={`option-${i+1}`} active onSelect={this.handleSelected}>{e} </MenuItem>
+                :
+                <MenuItem eventKey={i+1} key={`option-${i+1}`} onSelect={this.handleSelected}>{e}</MenuItem>);
+        let width = 10 * Math.max('Choose a label'.length,...Object.keys(this.props.labels).map(elem=> elem.length));
+        return (<SplitButton bsStyle={'default'} title={this.state.label} id={`dropdown-label`}
+                                style={{width: `${width}px`}}>
+                    <MenuItem disabled={true} defaultValue={true} key={`option-default`} onSelect={this.handleSelected}>
+                        Choose a label</MenuItem>
+                    {options}
+                    <MenuItem divider />
+                    <MenuItem eventKey={"0"} key={`option-0`} onSelect={this.handleSelected}>Add new label</MenuItem>
+            </SplitButton>);
 
-        return (
-            <form action="" onSubmit={this.handleSubmit}>
-                <input onChange={this.handleChangeAmount} value={this.state.amount} type="number"/>
-                <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
-                <input type="date" value={this.state.date} onChange={this.handleDateChange} />
-                <select onChange={this.handleSelected} value={this.state.label}>
-                    <option disabled={true} defaultValue={true}>Choose a label</option>
-                    {Labels}
-                    <option>Add new label</option>
-                </select>
-                <button>Submit outflow</button>
-            </form>
-
-        );
+        {/*// return (<div>{this.props.wrong? <span style={{color: "red"}}>Fields are not filled properly!</span> : <br />}*/}
+        {/*//     <form action="" onSubmit={this.handleSubmit} className={"form-horizontal"}>*/}
+        {/*//         <div className="form-group">*/}
+        {/*//             <label htmlFor="amount" className="control-label col-sm-4">Amount: </label>*/}
+        {/*//             <div className="col-sm-4">*/}
+        {/*//             <input onChange={this.handleChangeAmount} value={this.state.amount} type="number" name={"amount"}/>*/}
+        {/*//             </div>*/}
+        {/*//         </div>*/}
+        {/*//         <div className="form-group">*/}
+        {/*//             <label htmlFor="name" className="control-label col-sm-4">Name: </label>*/}
+        {/*//             <div className="col-sm-4">*/}
+        {/*//                 <input type="text" value={this.state.name} onChange={this.handleNameChange} name={"name"}/>*/}
+        {/*//             </div>*/}
+        {/*//         </div>*/}
+        {/*//         <div className="form-group">*/}
+        {/*//             <label htmlFor="date" className="control-label col-sm-4">Date: </label>*/}
+        {/*//             <div className="col-sm-4">*/}
+        {/*//                 <input type="date" value={this.state.date} onChange={this.handleDateChange} name={"date"}/>*/}
+        {/*//             </div>*/}
+        {/*//         </div>*/}
+        {/*//         <div className="form-group">*/}
+        {/*//             <label htmlFor="label" className="control-label col-sm-4">Category: </label>*/}
+        {/*//             <div className="col-sm-4">*/}
+        {/*//                 <select onChange={this.handleSelected} value={this.state.label} name={"label"}>*/}
+        {/*//                     <option disabled={true} defaultValue={true}>Choose a label</option>*/}
+        {/*//                     {Labels}*/}
+        {/*//                     <option>Add new label</option>*/}
+        {/*//                 </select>*/}
+        {/*//             </div>*/}
+        {/*//         </div>*/}
+        {/*//         <div className="form-group">*/}
+        {/*//             <div className="col-sm-offset-4 col-sm-4">*/}
+        {/*//                 <button className="btn btn-primary btn-block">Submit outflow</button>*/}
+        {/*//             </div>*/}
+        {/*//         </div>*/}
+        {/*//     </form>*/}
+        {/*//     </div>);*/}
     }
 }
