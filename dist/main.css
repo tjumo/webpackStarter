@@ -9,10 +9,13 @@ h1 {
 
 body {
   background: url('images/astronomy.jpg') no-repeat center;
-  background-size: cover;
+  background-size: 100% 100%;
   color: aliceblue;
 }
 input {
   background-color: darkslategray;
+}
+#app {
+  height: 100vh;
 }
 

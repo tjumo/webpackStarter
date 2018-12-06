@@ -3,7 +3,8 @@ import OutflowManagement from './ManagementView.jsx';
 import NotYetImplemented from '../NotFound/nyi.jsx';
 import moment from "moment";
 import * as colorUtils from './ColorUtils.jsx';
-import {ButtonGroup,Button} from 'react-bootstrap';
+import HistoryView from "./HistoryView.jsx";
+import PiechartView from './PiechartView.jsx';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -53,7 +54,7 @@ export default class Dashboard extends React.Component {
                 label: newLabel
             });
         }
-    }
+    };
 
     chartDataPreparation(arr) {
         let labels = new Set(arr.map(elem => elem.label));
@@ -88,6 +89,12 @@ export default class Dashboard extends React.Component {
         //TODO: postowanie do JSON-servera przez axios
     };
 
+    dateHandler = (name,date) => {
+        this.setState({
+            [name]: date
+        });
+    };
+
     rightView() {
         let tag;
         switch (this.state.mode) {
@@ -99,13 +106,16 @@ export default class Dashboard extends React.Component {
                                          outflowLabel={this.state.label}/>;
                 break;
             case 'History':
-                tag = <NotYetImplemented/>;
+                tag = <HistoryView dateHandler={this.dateHandler} outflows={this.state.outflows}
+                                   minDate={this.state.minDate} maxDate={this.state.maxDate}/>;
                 break;
             case 'Piechart View':
-                tag = <NotYetImplemented/>;
+                tag = <PiechartView dateHandler={this.dateHandler} outflows={this.state.outflows}
+                                    minDate={this.state.minDate} maxDate={this.state.maxDate}
+                                    colors={this.state.labels} dataPrep={this.chartDataPreparation}/>;
                 break;
             case 'Bubblechart View':
-                tag = <NotYetImplemented/>
+                tag = <NotYetImplemented/>;
                 break;
             default:
                 tag = <NotYetImplemented/>;
@@ -117,7 +127,7 @@ export default class Dashboard extends React.Component {
         this.setState({
             mode: name
         });
-    }
+    };
 
 
     render(){
@@ -173,7 +183,7 @@ class Icon extends React.Component {
             color: this.props.selected? "green": "aliceblue"}
     }
 
-    mouseHandler = (e) => {
+    mouseHandler = () => {
         if (!this.props.selected) {
             if (this.state.color === 'aliceblue') {
                 this.setState({
@@ -185,24 +195,23 @@ class Icon extends React.Component {
                 });
             }
         }
-    }
+    };
 
     componentWillReceiveProps(newProps) {
         this.setState({
             color: newProps.selected? "green": "aliceblue"});
     }
-    clickHandler = (e) => {
+    clickHandler = () => {
         if (typeof this.props.click === "function") {
             this.props.click(this.props.name)
         }
-    }
+    };
 
     render() {
         return (<div>
             <div style={{height: "30px"}} />
             <i className={this.props.className} style={this.state}
-               onClick={this.clickHandler} name={this.props.name}
-               onMouseEnter={this.mouseHandler} onMouseLeave={this.mouseHandler}/>
+               onClick={this.clickHandler} onMouseEnter={this.mouseHandler} onMouseLeave={this.mouseHandler}/>
             </div>)
     }
 }

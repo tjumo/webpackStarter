@@ -1,7 +1,6 @@
 import React from "react";
 import moment from "moment";
-import {SplitButton,MenuItem} from 'react-bootstrap';
-
+import {SplitButton, MenuItem, FormGroup, Col, ControlLabel, FormControl, Form, Button} from 'react-bootstrap';
 export default class NewOutflow extends React.Component {
     constructor(props) {
         super(props);
@@ -49,7 +48,7 @@ export default class NewOutflow extends React.Component {
                     label: label
                 });
             }
-    }
+    };
 
     validation() {
         return Number(this.state.amount) && this.state.name.length && (this.state.label !== 'Choose a label')
@@ -120,14 +119,65 @@ export default class NewOutflow extends React.Component {
         {/*//     </form>*/}
         {/*//     </div>);*/}
 
-        return (<SplitButton bsStyle={'default'} title={this.state.label} id={`dropdown-label`}
-                                style={{width: `${width}px`}}>
-                    <MenuItem disabled={true} defaultValue={true} key={`option-default`} onSelect={this.handleSelected}>
-                        Choose a label</MenuItem>
-                    {options}
-                    <MenuItem divider />
-                    <MenuItem eventKey={"0"} key={`option-0`} onSelect={this.handleSelected}>Add new label</MenuItem>
-            </SplitButton>);
+        return (<Form horizontal>
+                {/*{this.props.wrong? <span style={{color: "red"}}>Fields are not filled properly!</span> : <br />}*/}
+                <FormGroup controlId="formHorizontalDate"
+                           validationState={moment()>=moment(this.state.date,'YYYY-MM-DD')?'success':null}>
+                    <Col componentClass={ControlLabel} sm={3}>
+                        Date:
+                    </Col>
+                    <Col sm={9}>
+                    <FormControl type={"date"} value={this.state.date} name={"date"} onChange={this.handleDateChange}/>
+                    <FormControl.Feedback/>
+                    </Col>
+                </FormGroup>
+                <FormGroup controlId="formHorizontalName"
+                           validationState={this.state.name.length>0?'success':null}>
+                    <Col componentClass={ControlLabel} sm={3}>
+                        Name:
+                    </Col>
+                    <Col sm={9}>
+                    <FormControl type={"text"} value={this.state.name} name={"name"} onChange={this.handleNameChange}/>
+                    <FormControl.Feedback />
+                    </Col>
+                </FormGroup>
+            <FormGroup controlId="formHorizontalLabel"
+                    validationState={this.state.label==='Choose a label'?null:'success'}>
+                <Col componentClass={ControlLabel} sm={3}>
+                    Label:
+                </Col>
+                <Col sm={9}>
+                    <SplitButton bsStyle={'default'} title={this.state.label} id={`dropdown-label`}
+                                 style={{width: `${width}px`}}>
+                        <MenuItem disabled={true} defaultValue={true} key={`option-default`} onSelect={this.handleSelected}>
+                            Choose a label</MenuItem>
+                        {options}
+                        <MenuItem divider />
+                        <MenuItem eventKey={"0"} key={`option-0`} onSelect={this.handleSelected}>Add new label</MenuItem>
+                    </SplitButton>
+                </Col>
+            </FormGroup>
+                <FormGroup controlId="formHorizontalAmount"
+                           validationState={this.state.amount>0?'success':null}>
+                    <Col componentClass={ControlLabel} sm={3}>
+                        Amount:
+                    </Col>
+                    <Col sm={9}>
+                        <FormControl type={"number"} value={this.state.amount} name={"amount"}
+                                     onChange={this.handleChangeAmount}/>
+                        <FormControl.Feedback />
+                    </Col>
+                </FormGroup>
+                <FormGroup>
+                    <Col smOffset={3} sm={9}>
+                        <Button type={'submit'} onClick={this.handleSubmit}>Submit outflow</Button>
+                    </Col>
+                </FormGroup>
+
+            </Form>
+
+
+            );
 
 
     }
