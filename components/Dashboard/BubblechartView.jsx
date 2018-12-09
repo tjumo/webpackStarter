@@ -27,7 +27,7 @@ export default class BubblechartView extends React.Component {
             let labels = new Set(filteredOutflows.map(elem => elem.label));
             var data = [];
             for (let label of labels) {
-                console.log(label);
+                // console.log(label);
                 let sum = filteredOutflows.reduce((prev,curr) => {
                     if (curr.label === label) {
                         return prev+curr.amount
@@ -35,7 +35,7 @@ export default class BubblechartView extends React.Component {
                         return prev
                     }
                 },0);
-                console.log(sum);
+                // console.log(sum);
                 let color = filteredOutflows.find(elem => elem.label === label).color;
                 data.push({color: color, value: sum, label: label});
             }

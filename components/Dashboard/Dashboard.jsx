@@ -6,13 +6,15 @@ import * as colorUtils from './ColorUtils.jsx';
 import HistoryView from "./HistoryView.jsx";
 import PiechartView from './PiechartView.jsx';
 import BubblechartView from "./BubblechartView.jsx";
+import Icon from './Icon.jsx';
+// import {Button, ButtonGroup} from "react-bootstrap";
 
 export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            mode: 'Outflow Management',
+            mode: 'Management',
             // outflows: [],
             outflows: [
                 {name: "tesco", amount: 310, date: "2018-12-01", label: "Food", color: "#FF320F", id: 0},
@@ -20,8 +22,8 @@ export default class Dashboard extends React.Component {
                 {name: "chata", amount: 2200, date: "2018-12-03", label: "Bills", color: "#00833D", id: 2},
                 {name: "krakow", amount: 220, date: "2018-12-04", label: "Transportation", color: "#52528C", id: 3},
                 {name: "przedszkole", amount: 960, date: "2018-12-05", label: "Toys", color: "#a9347e", id: 4},
-                {name: "lidl", amount: 220, date: "2018-12-07", label: "Food", color: "#FF320F", id: 5},
-                {name: "wigilia", amount: 500, date: "2018-12-06", label: "Gifts", color: "#bada55", id: 6},
+                {name: "wigilia", amount: 500, date: "2018-12-06", label: "Gifts", color: "#bada55", id: 5},
+                {name: "lidl", amount: 220, date: "2018-12-07", label: "Food", color: "#FF320F", id: 6},
                 {name: "metallica", amount: 420, date: "2018-12-07", label: "Tickets", color: "#ff05bf", id: 7}
                 ],
             minDate: moment().subtract(3, 'days').format('YYYY-MM-DD'),
@@ -83,21 +85,9 @@ export default class Dashboard extends React.Component {
             // console.log(item);
             ans.add(item);
         }
-        console.log(Array.from(ans));
+        // console.log(Array.from(ans));
         return arr.length>0 ? Array.from(ans) : [];
     }
-
-    newOutflowHandler = (amount,date,name,label) => {
-        let outflow = {amount: parseInt(amount,10),
-            date: date,
-            name: name,
-            label: label,
-            color: this.state.labels[label]};
-        this.setState({
-            outflows: [...this.state.outflows,outflow]
-        });
-        //TODO: postowanie do JSON-servera przez axios
-    };
 
     dateHandler = (name,date) => {
         this.setState({
@@ -105,27 +95,57 @@ export default class Dashboard extends React.Component {
         });
     };
 
+    newOutflowHandler = (id, date, name, amount, label) => {
+        let outflow = {id: id,
+            amount: parseInt(amount,10),
+            date: date,
+            name: name,
+            label: label,
+            color: this.state.labels[label]};
+        this.setState({
+            outflows: [...this.state.outflows,outflow],
+            label: 'Choose a label'
+        });
+        //TODO: postowanie do JSON-servera przez axios
+    };
+
+    editHandler = (id, date, name, amount, label) => {
+        let color = this.state.labels[label];
+        let editedOutflow = {id: id, name: name, date: date, amount: amount, label: label, color: color};
+        let oldItem = this.state.outflows.find(elem => elem.id === id);
+        let pos = this.state.outflows.indexOf(oldItem);
+        this.state.outflows[pos] = editedOutflow;
+    };
+
+    deleteHandler = (id) => {
+        this.setState({
+            outflows: this.state.outflows.filter(elem => elem.id!==id)
+        });
+    };
+
     rightView() {
         let tag;
         switch (this.state.mode) {
-            case 'Outflow Management':
-                tag = <OutflowManagement newOutflowHandler={this.newOutflowHandler}
-                                         newLabelHandler={this.handleNewLabel}
-                                         outflows={this.state.outflows}
-                                         labels={this.state.labels}
-                                         outflowLabel={this.state.label}/>;
-                break;
-            case 'History':
+            // case 'Outflow Management':
+            //     tag = <OutflowManagement newOutflowHandler={this.newOutflowHandler}
+            //                              newLabelHandler={this.handleNewLabel}
+            //                              outflows={this.state.outflows}
+            //                              labels={this.state.labels}
+            //                              outflowLabel={this.state.label}/>;
+            //     break;
+            case 'Management':
                 tag = <HistoryView dateHandler={this.dateHandler} outflows={this.state.outflows}
                                    minDate={this.state.minDate} maxDate={this.state.maxDate}
-                                   newLabelHandler={this.handleNewLabel} labels={this.state.labels}/>;
+                                   newLabelHandler={this.handleNewLabel} labels={this.state.labels}
+                                   saveHandler={this.editHandler} deleteHandler={this.deleteHandler}
+                                   outflowLabel={this.state.label} newOutflowHandler={this.newOutflowHandler}/>;
                 break;
-            case 'Piechart View':
+            case 'Piechart':
                 tag = <PiechartView dateHandler={this.dateHandler} outflows={this.state.outflows}
                                     minDate={this.state.minDate} maxDate={this.state.maxDate}
                                     colors={this.state.labels} dataPrep={this.chartDataPreparation}/>;
                 break;
-            case 'Bubblechart View':
+            case 'Bubblechart':
                 tag = <BubblechartView dateHandler={this.dateHandler} outflows={this.state.outflows}
                                        minDate={this.state.minDate} maxDate={this.state.maxDate}/>;
                 break;
@@ -143,32 +163,16 @@ export default class Dashboard extends React.Component {
 
 
     render(){
-        let icons = [["Outflow Management", "glyphicon glyphicon-piggy-bank"],
-                     ["History", "fas fa-book"],
-                     ["Bubblechart View", "fas fa-spinner"],
-                     ["Piechart View", "fas fa-chart-pie"]].map((pair,i) => <Icon key={`icon-${i}`} name={pair[0]}
-                                                                                 selected={(pair[0]===this.state.mode)}
-                                                                                 className={pair[1]}
-                                                                                 click={this.clickHandler} />);
+        let icons = [//["Outflow Management", "glyphicon glyphicon-piggy-bank"],
+                     ["Management", "glyphicon glyphicon-piggy-bank"],
+                     ["Bubblechart", "fas fa-spinner"],
+                     ["Piechart", "fas fa-chart-pie"]].map((pair,i) => <Icon key={`icon-${i}`} name={pair[0]}
+                                                                             selected={(pair[0]===this.state.mode)}
+                                                                             className={pair[1]} size={4}
+                                                                             click={this.clickHandler} />);
 
         return (<div className={"row"}>
             <div className={"col-sm-2"}>
-                {/*<div className={'col-12'}>*/}
-                {/*<ButtonGroup vertical bsSize={"lg"}>*/}
-                    {/*<Button onClick={this.clickHandler} name={"OutflowManagement"}>*/}
-                        {/*<i className={"glyphicon glyphicon-piggy-bank"} />*/}
-                    {/*</Button>*/}
-                    {/*<Button onClick={this.clickHandler} name={"HistoryView"}>*/}
-                        {/*<i className={"fas fa-book"} />*/}
-                    {/*</Button>*/}
-                    {/*<Button onClick={this.clickHandler} name={"BubbleChartView"}>*/}
-                        {/*<i className={"fas fa-spinner"}/>*/}
-                    {/*</Button>*/}
-                    {/*<Button onClick={this.clickHandler} name={"PieChartView"}>*/}
-                        {/*<i className={"fas fa-chart-pie"}/>*/}
-                    {/*</Button>*/}
-                {/*</ButtonGroup>*/}
-                {/*</div>*/}
                 <div style={{height: "25px"}}/>
                 {icons}
 
@@ -182,50 +186,6 @@ export default class Dashboard extends React.Component {
                 </div>
             </div>
         </div>);
-    }
-}
-
-class Icon extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            display: "block",
-            fontSize: "60px",
-            color: this.props.selected? "green": "aliceblue"}
-    }
-
-    mouseHandler = () => {
-        if (!this.props.selected) {
-            if (this.state.color === 'aliceblue') {
-                this.setState({
-                    color: "yellow" //TODO: kolor do dogrania
-                })
-            } else {
-                this.setState({
-                    color: "aliceblue"
-                });
-            }
-        }
-    };
-
-    componentWillReceiveProps(newProps) {
-        this.setState({
-            color: newProps.selected? "green": "aliceblue"});
-    }
-    clickHandler = () => {
-        if (typeof this.props.click === "function") {
-            this.props.click(this.props.name)
-        }
-    };
-
-    render() {
-        return (<div  className={'text-center'}>
-            <div style={{height: "15px"}}/>
-            <i className={this.props.className} style={this.state}
-               onClick={this.clickHandler} onMouseEnter={this.mouseHandler} onMouseLeave={this.mouseHandler}/>
-            <div style={{height: "15px"}}/>
-            </div>)
     }
 }
 
