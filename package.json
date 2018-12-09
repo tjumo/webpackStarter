@@ -13,6 +13,7 @@
   ],
   "devDependencies": {
     "d3": "^5.7.0",
+    "@weknow/react-bubble-chart-d3": "^1.0.11",
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
