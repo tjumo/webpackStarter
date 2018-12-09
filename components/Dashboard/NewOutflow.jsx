@@ -81,44 +81,6 @@ export default class NewOutflow extends React.Component {
 
         let width = 10 * Math.max('Choose a label'.length,...Object.keys(this.props.labels).map(elem=> elem.length));
 
-        {/*// return (<div>{this.props.wrong? <span style={{color: "red"}}>Fields are not filled properly!</span> : <br />}*/}
-        {/*//     <form action="" onSubmit={this.handleSubmit} className={"form-horizontal"}>*/}
-        {/*//         <div className="form-group">*/}
-        {/*//             <label htmlFor="amount" className="control-label col-sm-4">Amount: </label>*/}
-        {/*//             <div className="col-sm-4">*/}
-        {/*//             <input onChange={this.handleChangeAmount} value={this.state.amount} type="number" name={"amount"}/>*/}
-        {/*//             </div>*/}
-        {/*//         </div>*/}
-        {/*//         <div className="form-group">*/}
-        {/*//             <label htmlFor="name" className="control-label col-sm-4">Name: </label>*/}
-        {/*//             <div className="col-sm-4">*/}
-        {/*//                 <input type="text" value={this.state.name} onChange={this.handleNameChange} name={"name"}/>*/}
-        {/*//             </div>*/}
-        {/*//         </div>*/}
-        {/*//         <div className="form-group">*/}
-        {/*//             <label htmlFor="date" className="control-label col-sm-4">Date: </label>*/}
-        {/*//             <div className="col-sm-4">*/}
-        {/*//                 <input type="date" value={this.state.date} onChange={this.handleDateChange} name={"date"}/>*/}
-        {/*//             </div>*/}
-        {/*//         </div>*/}
-        {/*//         <div className="form-group">*/}
-        {/*//             <label htmlFor="label" className="control-label col-sm-4">Category: </label>*/}
-        {/*//             <div className="col-sm-4">*/}
-        {/*//                 <select onChange={this.handleSelected} value={this.state.label} name={"label"}>*/}
-        {/*//                     <option disabled={true} defaultValue={true}>Choose a label</option>*/}
-        {/*//                     {Labels}*/}
-        {/*//                     <option>Add new label</option>*/}
-        {/*//                 </select>*/}
-        {/*//             </div>*/}
-        {/*//         </div>*/}
-        {/*//         <div className="form-group">*/}
-        {/*//             <div className="col-sm-offset-4 col-sm-4">*/}
-        {/*//                 <button className="btn btn-primary btn-block">Submit outflow</button>*/}
-        {/*//             </div>*/}
-        {/*//         </div>*/}
-        {/*//     </form>*/}
-        {/*//     </div>);*/}
-
         return (<Form horizontal>
                 {/*{this.props.wrong? <span style={{color: "red"}}>Fields are not filled properly!</span> : <br />}*/}
                 <FormGroup controlId="formHorizontalDate"
