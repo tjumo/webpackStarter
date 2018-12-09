@@ -11,13 +11,14 @@ export default class OutflowManagement extends React.Component {
     }
 
     render() {
-        let filteredOutflows = this.props.outflows.slice(0,6);
+        let filteredOutflows = this.props.outflows.slice(-6);
 
-        let outflowItems = filteredOutflows.map((item,i) => <SingleOutflow date={item.date}
-                                                                           name={item.name}
-                                                                           amount={item.amount}
-                                                                           label={item.label}
-                                                                           key={`outflow-${i}`} color={item.color}/>);
+        let outflowItems = filteredOutflows.map((item,i) => <SingleOutflow date={item.date} key={`outflow-${i}`}
+                                                                           name={item.name} amount={item.amount}
+                                                                           label={item.label} color={item.color}
+                                                                           id={`outflow-${item.id}`}
+                                                                           labels={this.props.labels}
+                                                                           addLabel={this.props.newLabelHandler}/>);
 
         return(<div>
                    <NewOutflow submitHandler={this.props.newOutflowHandler} addLabel={this.props.newLabelHandler}
@@ -29,6 +30,8 @@ export default class OutflowManagement extends React.Component {
                     <th scope={"col"}>Name</th>
                     <th scope={"col"}>Amount</th>
                     <th scope={"col"}>Label</th>
+                    <th scope={"col"}> </th>
+                    <th scope={"col"}> </th>
                     </tr>
                 </thead>
                 <tbody>

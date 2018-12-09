@@ -19,11 +19,13 @@ export default class HistoryView extends React.Component {
     render() {
         let filteredOutflows = this.props.outflows.filter(elem => this.belongsToPeriodInQuestion(elem));
 
-        let outflowItems = filteredOutflows.map((item,i) => <SingleOutflow date={item.date}
-                                                                           name={item.name}
-                                                                           amount={item.amount}
-                                                                           label={item.label}
-                                                                           key={`outflow-${i}`} color={item.color}/>);
+        let outflowItems = filteredOutflows.map((item,i) => <SingleOutflow date={item.date} key={`outflow-${i}`}
+                                                                           name={item.name} amount={item.amount}
+                                                                           label={item.label} color={item.color}
+                                                                           id={`outflow-${item.id}`}
+                                                                           labels={this.props.labels}
+                                                                           addLabel={this.props.newLabelHandler}
+                                                                           labels={this.props.labels}/>);
 
         return (<div>
         <DateSpan minDate={this.props.minDate} maxDate={this.props.maxDate} handler={this.props.dateHandler}/>
@@ -34,6 +36,8 @@ export default class HistoryView extends React.Component {
                 <th scope={"col"}>Name</th>
                 <th scope={"col"}>Amount</th>
                 <th scope={"col"}>Label</th>
+                <th scope={"col"}> </th>
+                <th scope={"col"}> </th>
             </tr>
             </thead>
             <tbody>
