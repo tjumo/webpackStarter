@@ -20,9 +20,10 @@ export default class PiechartView extends React.Component {
         return (<div>
             <DateSpan minDate={this.props.minDate} maxDate={this.props.maxDate} handler={this.props.dateHandler}/>
             {filteredOutflows.length>0?
-                <Piechart data={this.props.dataPrep(filteredOutflows)} colors={this.props.colors} x={100} y={100}
-                          outerRadius={100} innerRadius={0} offset={75}/> :
-                <><br/><span style={{color: "red", fontWeight: "bold"}}>No historical outflows in selected date span!</span></>}
+                <div className={"text-center col-sm-9"}>
+                    <Piechart data={this.props.dataPrep(filteredOutflows)} colors={this.props.colors} x={200} y={200}
+                              outerRadius={200} innerRadius={80} offset={75}/></div> :
+                <><br/><span style={{color: "red", fontWeight: "bold"}}>No historical outlays in selected date span!</span></>}
         </div>);}
 
 
