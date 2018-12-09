@@ -6,7 +6,7 @@ export const colorGenerator = () => {
 };
 
 export const colorSimilarity = (red,green,blue,red2,green2,blue2) => {
-    return (Math.abs(red-red2) * Math.abs(green-green2) * Math.abs(blue-blue2) < 1000 );
+    return (Math.abs(red-red2) * Math.abs(green-green2) * Math.abs(blue-blue2) < 5000 );
 };
 
 export const colorHashToNum = (hash) => {
