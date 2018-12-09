@@ -18,4 +18,10 @@ input {
 #app {
   height: 100vh;
 }
+text {
+  fill: aliceblue;
+  font-weight: bold;
+  font-family: Monospace;
+  font-size: 14px;
+}
 

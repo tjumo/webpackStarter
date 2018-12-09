@@ -5,6 +5,7 @@ import moment from "moment";
 import * as colorUtils from './ColorUtils.jsx';
 import HistoryView from "./HistoryView.jsx";
 import PiechartView from './PiechartView.jsx';
+import BubblechartView from "./BubblechartView.jsx";
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -13,7 +14,16 @@ export default class Dashboard extends React.Component {
         this.state = {
             mode: 'Outflow Management',
             // outflows: [],
-            outflows: [{name: "chata", amount: 2200, date: "2018-12-03", label: "Bills", color: "#00833D"}],
+            outflows: [
+                {name: "tesco", amount: 310, date: "2018-12-01", label: "Food", color: "#FF320F", id: 0},
+                {name: "buty", amount: 800, date: "2018-12-02", label: "Clothing", color: "#e55120", id: 1},
+                {name: "chata", amount: 2200, date: "2018-12-03", label: "Bills", color: "#00833D", id: 2},
+                {name: "krakow", amount: 220, date: "2018-12-04", label: "Transportation", color: "#52528C", id: 3},
+                {name: "przedszkole", amount: 960, date: "2018-12-05", label: "Toys", color: "#a9347e", id: 4},
+                {name: "lidl", amount: 220, date: "2018-12-07", label: "Food", color: "#FF320F", id: 5},
+                {name: "wigilia", amount: 500, date: "2018-12-06", label: "Gifts", color: "#bada55", id: 6},
+                {name: "metallica", amount: 420, date: "2018-12-07", label: "Tickets", color: "#ff05bf", id: 7}
+                ],
             minDate: moment().subtract(3, 'days').format('YYYY-MM-DD'),
             maxDate: '2018-12-31',
             label: 'Choose a label',
@@ -22,7 +32,7 @@ export default class Dashboard extends React.Component {
                 Bills: "#00833D",
                 Restaurants: "#004CCA",
                 Transportation: "#52528C",
-                Tickets: "#fff85b",
+                Tickets: "#ff05bf",
                 Clothing: "#e55120",
                 Toys: "#a9347e",
                 Gifts: "#bada55"
@@ -107,7 +117,8 @@ export default class Dashboard extends React.Component {
                 break;
             case 'History':
                 tag = <HistoryView dateHandler={this.dateHandler} outflows={this.state.outflows}
-                                   minDate={this.state.minDate} maxDate={this.state.maxDate}/>;
+                                   minDate={this.state.minDate} maxDate={this.state.maxDate}
+                                   newLabelHandler={this.handleNewLabel} labels={this.state.labels}/>;
                 break;
             case 'Piechart View':
                 tag = <PiechartView dateHandler={this.dateHandler} outflows={this.state.outflows}
@@ -115,7 +126,8 @@ export default class Dashboard extends React.Component {
                                     colors={this.state.labels} dataPrep={this.chartDataPreparation}/>;
                 break;
             case 'Bubblechart View':
-                tag = <NotYetImplemented/>;
+                tag = <BubblechartView dateHandler={this.dateHandler} outflows={this.state.outflows}
+                                       minDate={this.state.minDate} maxDate={this.state.maxDate}/>;
                 break;
             default:
                 tag = <NotYetImplemented/>;
@@ -157,7 +169,7 @@ export default class Dashboard extends React.Component {
                     {/*</Button>*/}
                 {/*</ButtonGroup>*/}
                 {/*</div>*/}
-
+                <div style={{height: "25px"}}/>
                 {icons}
 
             </div>
@@ -208,10 +220,11 @@ class Icon extends React.Component {
     };
 
     render() {
-        return (<div>
-            <div style={{height: "30px"}} />
+        return (<div  className={'text-center'}>
+            <div style={{height: "15px"}}/>
             <i className={this.props.className} style={this.state}
                onClick={this.clickHandler} onMouseEnter={this.mouseHandler} onMouseLeave={this.mouseHandler}/>
+            <div style={{height: "15px"}}/>
             </div>)
     }
 }
