@@ -1,19 +1,30 @@
 import React from "react";
 import moment from "moment";
-import {Col, ControlLabel, FormControl, FormGroup, MenuItem, SplitButton} from "react-bootstrap";
+import {FormControl, FormGroup, MenuItem, SplitButton} from "react-bootstrap";
+import Icon from './Icon.jsx';
 
 export default class SingleOutflow extends React.Component {
     constructor(props){
         super(props);
 
         this.state = {
-            edit: false,
+            edit: this.props.edit,
             name: this.props.name,
             amount: this.props.amount,
             label: this.props.label,
             date: this.props.date,
-            color: this.props.color
+            color: this.props.labels[this.props.label]
         }
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            label: newProps.label
+        })
+    }
+
+    validation() {
+        return (Number(this.state.amount)>0) && (this.state.name.length>0) && (this.state.label!=='Choose a label')
     }
 
     handleNameChange = (e) => {
@@ -52,7 +63,7 @@ export default class SingleOutflow extends React.Component {
 
     delete = () => {
         if (typeof this.props.deleteHandler === 'function') {
-            this.props.deleteHandler(this.props.id);
+            this.props.deleteHandler(Number(this.props.id.substring(8)));
         }
     };
 
@@ -63,10 +74,21 @@ export default class SingleOutflow extends React.Component {
     };
 
     save = () => {
-        if (typeof this.props.saveHandler === 'function') {
-            this.props.saveHandler(this.props.id, this.state.date, this.state.name, this.state.amount, this.state.label);
+        // console.log(typeof this.props.saveHandler);
+        if (this.validation()) {
+            if (typeof this.props.saveHandler === 'function' ) {
+                // console.log(`${this.props.id} item -- sends data to my saveHandler`);
+                this.props.saveHandler(Number(this.props.id.substring(8)),
+                    this.state.date,
+                    this.state.name,
+                    this.state.amount,
+                    this.state.label);
+            }
+            this.setState({edit: false});
+        } else {
+            alert('Fields are incomplete!');
         }
-        this.setState({edit: false});
+
     };
 
     render() {
@@ -113,11 +135,11 @@ export default class SingleOutflow extends React.Component {
             </FormGroup>
                 : this.state.label}</td>
             <td>
-                {this.state.edit? <i className={"far fa-save"} onClick={this.save} alt={"Save"}> </i>
-                                : <i className={"far fa-edit"} onClick={this.edit} alt={"Edit"}> </i>}
+                {this.state.edit? <Icon className={'far fa-save'} size={1} click={this.save} name={"Save"}/>
+                                : <Icon className={'far fa-edit'} size={1} click={this.edit} name={"Edit"}/> }
             </td>
             <td>
-                <i className={"far fa-trash-alt"} onClick={this.delete} alt={"Delete"}> </i>
+                <Icon className={'far fa-trash-alt'} size={1} click={this.delete} name={"Delete"}/>
             </td>
         </tr>)
     }
