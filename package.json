@@ -12,6 +12,8 @@
     "last 2 versions"
   ],
   "devDependencies": {
+    "firebase": "^5.5.8",
+    "react-google-button": "^0.5.3",
     "d3": "^5.7.0",
     "@weknow/react-bubble-chart-d3": "^1.0.11",
     "@babel/core": "^7.1.0",
