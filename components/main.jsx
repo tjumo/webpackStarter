@@ -1,36 +1,42 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import LoginForm from './WelcomePage/Login.jsx';
+import WelcomePage from './WelcomePage/WelcomePage.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx'
+import * as firebase from "firebase";
+import {provider} from './Fire/config';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            loggedIn: false,
-            wrong: false
+            logged: false,
+            uid: ''
         };
     }
-    loginHandler = (login, password) => {
-        if (login === 'admin' && password === 'demo') {
-            this.setState({loggedIn: true});
-            return true;
-        } else {
-            this.setState({
-                wrong: true
-            });
-            return false;
-        }
+    signOffHandler = () => {
+        firebase.auth().signOut().then(() => {
+            this.setState({uid: '', logged: false});
+        }).catch(err => {console.log(err);});
     };
+
+    loginHandler = () => {
+        firebase.auth().signInWithPopup(provider).then(result=>{
+            this.setState({uid: result.user.uid, logged: true});
+            console.log(result.user.uid);
+        }).catch(error=> {
+            console.log(error.code);
+            console.log(error.message);
+        });
+    };
+
     render(){
-        return this.state.loggedIn?<Dashboard/>:<LoginForm onLog={this.loginHandler} wrong={this.state.wrong}/>;
+        return (this.state.logged?
+            <Dashboard uid={this.state.uid} signOff={this.signOffHandler}/>
+            :
+            <WelcomePage loginHandler={this.loginHandler}/>);
     }
 }
-
-// const LoggedIn = () => <h1 className={"text-center"}>Zalogowany</h1>;
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
    ReactDOM.render(<App/>, document.getElementById('app'))
