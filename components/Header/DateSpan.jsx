@@ -33,14 +33,16 @@ export default class DateSpan extends React.Component {
                     From:
                 </Col>
                 <Col sm={3}>
-                    <FormControl type={"date"} value={this.props.minDate} name={"minDate"} onChange={this.handleDate}/>
+                    <FormControl type={"date"} value={this.props.minDate} name={"minDate"}
+                                 onChange={this.handleDate}/>
 
                 </Col>
                 <Col componentClass={ControlLabel} sm={1}>
                     To:
                 </Col>
                 <Col sm={3}>
-                    <FormControl type={"date"} value={this.props.maxDate} name={"maxDate"} onChange={this.handleDate}/>
+                    <FormControl type={"date"} value={this.props.maxDate} name={"maxDate"}
+                                 onChange={this.handleDate}/>
                     <FormControl.Feedback/>
                 </Col>
                 <Col sm={4}>
