@@ -1,6 +1,6 @@
 import React from 'react';
 import Piechart from '../Piechart/Piechart.jsx';
-import DateSpan from "./DateSpan.jsx";
+import DateSpan from "../Header/DateSpan.jsx";
 import moment from "moment";
 
 export default class PiechartView extends React.Component {
@@ -18,7 +18,6 @@ export default class PiechartView extends React.Component {
         let filteredOutflows = this.props.outflows.filter(elem => this.belongsToPeriodInQuestion(elem));
 
         return (<div>
-            <DateSpan minDate={this.props.minDate} maxDate={this.props.maxDate} handler={this.props.dateHandler}/>
             {filteredOutflows.length>0?
                 <div className={"text-center col-sm-9"}>
                     <Piechart data={this.props.dataPrep(filteredOutflows)} colors={this.props.colors} x={200} y={200}
