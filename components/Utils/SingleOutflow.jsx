@@ -13,7 +13,7 @@ export default class SingleOutflow extends React.Component {
             amount: this.props.amount,
             label: this.props.label,
             date: this.props.date,
-            color: this.props.labels[this.props.label]
+            color: this.props.color
         }
     }
 
@@ -63,7 +63,7 @@ export default class SingleOutflow extends React.Component {
 
     delete = () => {
         if (typeof this.props.deleteHandler === 'function') {
-            this.props.deleteHandler(Number(this.props.id.substring(8)));
+            this.props.deleteHandler(this.props.id.substring(8));
         }
     };
 
@@ -78,7 +78,7 @@ export default class SingleOutflow extends React.Component {
         if (this.validation()) {
             if (typeof this.props.saveHandler === 'function' ) {
                 // console.log(`${this.props.id} item -- sends data to my saveHandler`);
-                this.props.saveHandler(Number(this.props.id.substring(8)),
+                this.props.saveHandler(this.props.id.substring(8),
                     this.state.date,
                     this.state.name,
                     this.state.amount,
