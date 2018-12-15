@@ -1,13 +1,14 @@
 import React from "react";
 
-export default class Icon extends React.Component {
+export class BaseIcon extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            display: "block",
+            display: "inline",
             fontSize: `${this.props.size * 15}px`,
-            color: this.props.selected? "green": "aliceblue"}
+            color: this.props.selected ? "green" : "aliceblue"
+        }
     }
 
     mouseHandler = () => {
@@ -26,8 +27,10 @@ export default class Icon extends React.Component {
 
     componentWillReceiveProps(newProps) {
         this.setState({
-            color: newProps.selected? "green": "aliceblue"});
+            color: newProps.selected ? "green" : "aliceblue"
+        });
     }
+
     clickHandler = () => {
         if (typeof this.props.click === "function") {
             this.props.click(this.props.name)
@@ -35,10 +38,16 @@ export default class Icon extends React.Component {
     };
 
     render() {
+        return <i style={this.state} onMouseEnter={this.mouseHandler} onMouseLeave={this.mouseHandler}
+                  onClick={this.clickHandler} className={this.props.className} />;
+    }
+}
+
+export default class Icon extends BaseIcon {
+    render() {
         return (<div  className={'text-center'}>
             <div style={{height: `${this.props.size * 4}px`}}/>
-            <i className={this.props.className} style={this.state}
-               onClick={this.clickHandler} onMouseEnter={this.mouseHandler} onMouseLeave={this.mouseHandler}/>
+            {super.render()}
             <div style={{height: `${this.props.size * 4}px`}}/>
         </div>)
     }
