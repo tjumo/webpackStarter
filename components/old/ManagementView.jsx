@@ -1,6 +1,6 @@
 import React from 'react';
 import NewOutflow from './NewOutflow.jsx';
-import SingleOutflow from './SingleOutflow.jsx';
+import SingleOutflow from '../Utils/SingleOutflow.jsx';
 import {Table} from 'react-bootstrap';
 
 
