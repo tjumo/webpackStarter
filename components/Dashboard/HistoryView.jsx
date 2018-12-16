@@ -1,6 +1,5 @@
 import React from 'react';
 import {Table,Button} from 'react-bootstrap';
-import DateSpan from '../Header/DateSpan.jsx'
 import moment from "moment";
 import SingleOutflow from "../Utils/SingleOutflow.jsx";
 import Icon, {BaseIcon} from '../Utils/Icon.jsx';
@@ -50,14 +49,14 @@ export default class HistoryView extends React.Component {
                 break;
             case "Name sort":
                 ans = this.state.reverse?
-                    (item1.name.localeCompare(item2.name)) : (item2.name.localeCompare(item1.name));
+                    (item2.name.localeCompare(item1.name)) : (item1.name.localeCompare(item2.name));
                 break;
             case "Amount sort":
                 ans = this.state.reverse? (item2.amount - item1.amount) : (item1.amount - item2.amount);
                 break;
             case "Label sort":
                 ans = this.state.reverse?
-                    (item1.label.localeCompare(item2.label)) : (item2.label.localeCompare(item1.label));
+                    (item2.label.localeCompare(item1.label)) : (item1.label.localeCompare(item2.label));
                 break;
             default:
                 ans = 0;
@@ -107,7 +106,7 @@ export default class HistoryView extends React.Component {
                               selected={"Amount sort"===this.state.sort}/> Amount</th>
                 <th scope={"col"}>
                     <BaseIcon className={"fas fa-sort"} size={1} click={this.sortHandler} name={"Label sort"}
-                              active={"Label sort" === this.state.sort}/> Label</th>
+                              selected={"Label sort" === this.state.sort}/> Label</th>
                 <th scope={"col"}>{!this.state.newOutflow &&
                 <Icon className={'fas fa-plus'} size={2} click={this.clickAdd} name={"Add"}/>}</th>
                 <th scope={"col"} />

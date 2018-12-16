@@ -16,17 +16,7 @@ export default class Dashboard extends React.Component {
 
         this.state = {
             mode: 'Management',
-            // outflows: [],
-            outflows: [
-                // {name: "tesco", amount: 310, date: "2018-12-01", label: "Food", color: "#FF320F", id: 0},
-                // {name: "buty", amount: 800, date: "2018-12-02", label: "Clothing", color: "#e55120", id: 1},
-                // {name: "chata", amount: 2200, date: "2018-12-03", label: "Bills", color: "#00833D", id: 2},
-                // {name: "krakow", amount: 220, date: "2018-12-04", label: "Transportation", color: "#52528C", id: 3},
-                // {name: "przedszkole", amount: 960, date: "2018-12-05", label: "Toys", color: "#a9347e", id: 4},
-                // {name: "wigilia", amount: 500, date: "2018-12-06", label: "Gifts", color: "#bada55", id: 5},
-                // {name: "lidl", amount: 220, date: "2018-12-07", label: "Food", color: "#FF320F", id: 6},
-                // {name: "metallica", amount: 420, date: "2018-12-07", label: "Tickets", color: "#ff05bf", id: 7}
-            ],
+            outflows: [],
             minDate: moment().subtract(3, 'days').format('YYYY-MM-DD'),
             maxDate: '2018-12-31',
             label: 'Choose a label',
@@ -35,9 +25,9 @@ export default class Dashboard extends React.Component {
                 Bills: "#00833D",
                 Restaurants: "#004CCA",
                 Transportation: "#52528C",
-                Tickets: "#ff05bf",
+                Events: "#ff05bf",
                 Clothing: "#e55120",
-                Toys: "#a9347e",
+                Kids: "#a9347e",
                 Gifts: "#bada55"
             },
             bubble: 'expand'
@@ -55,9 +45,9 @@ export default class Dashboard extends React.Component {
                 Bills: "#00833D",
                 Restaurants: "#004CCA",
                 Transportation: "#52528C",
-                Tickets: "#ff05bf",
+                Events: "#ff05bf",
                 Clothing: "#e55120",
-                Toys: "#a9347e",
+                Kids: "#a9347e",
                 Gifts: "#bada55"
             }});
         db.collection('labels').where('uid','==',this.props.uid).get().then((snap) => {
